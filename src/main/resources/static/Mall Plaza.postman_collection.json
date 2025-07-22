@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "a92bb313-59ba-4d66-bf72-28433349d55d",
+		"name": "Mall Plaza",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10288288"
+	},
+	"item": [
+		{
+			"name": "Buscar vehiculo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/vehicles",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vehiculos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/vehicles",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "guardar vehiculo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"plate\":\"XXZZ11\",\r\n    \"brand\":\"Chevrolet\",\r\n    \"model\":\"Corvette\",\r\n    \"color\":\"orange\",\r\n    \"owner\":\"Richard Lowe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/vehicles",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editar vehiculo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"plate\":\"XXZZ11\",\r\n    \"brand\":\"Chevrolet\",\r\n    \"model\":\"Corvette\",\r\n    \"color\":\"green\",\r\n    \"owner\":\"Richard Lowe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/vehicles/XXZZ12",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vehicles",
+						"XXZZ12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "eliminar vehiculo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/vehicles/BBCC22",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"vehicles",
+						"BBCC22"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}
