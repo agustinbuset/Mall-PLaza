@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,5 +44,30 @@ class VehicleServiceImplTest {
         Mockito.when(vehicleDAO.existsByPlate("AAA111")).thenReturn(true);
 
         assertThrows(DuplicatePlateException.class, () -> vehicleService.saveVehicle(vehicleDTO));
+    }
+
+    @Test
+    void shouldSaveNewVehicle() throws DuplicatePlateException {
+        VehicleDTO dto = new VehicleDTO("BBB222", "Blue", "Mazda", "3", "Alice", null);
+        Mockito.when(vehicleDAO.existsByPlate("BBB222")).thenReturn(false);
+
+        Vehicle saved = new Vehicle("BBB222", "Blue", "Mazda", "3", "Alice", Timestamp.valueOf("2023-01-01 10:00:00"));
+        Mockito.when(vehicleDAO.save(Mockito.any(Vehicle.class))).thenReturn(saved);
+
+        VehicleDTO result = vehicleService.saveVehicle(dto);
+
+        assertEquals("BBB222", result.getPlate());
+        assertEquals("Mazda", result.getBrand());
+    }
+
+    @Test
+    void shouldReturnAllVehicles() {
+
+        Mockito.when(vehicleDAO.findAll()).thenReturn(TestConstants.allVehiclesList());
+
+        List<VehicleDTO> result = vehicleService.getAllVehicles();
+
+        assertEquals(3, result.size());
+        assertEquals("AAAA11", result.get(0).getPlate());
     }
 }

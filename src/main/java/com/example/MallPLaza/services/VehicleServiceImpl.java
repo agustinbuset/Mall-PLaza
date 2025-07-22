@@ -6,6 +6,8 @@ import com.example.MallPLaza.exceptions.DuplicatePlateException;
 import com.example.MallPLaza.exceptions.NonExistentPlateException;
 import com.example.MallPLaza.mapper.VehicleMapper;
 import com.example.MallPLaza.models.Vehicle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +20,10 @@ import java.util.Optional;
 @Service
 public class VehicleServiceImpl implements VehicleService{
 
+    Logger logger = LoggerFactory.getLogger(VehicleServiceImpl.class);
+
     @Autowired
-    private VehicleDAO vehicleDAO;
+    private final VehicleDAO vehicleDAO;
 
     public VehicleServiceImpl(VehicleDAO dao){
         this.vehicleDAO=dao;
@@ -27,6 +31,7 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     public List<VehicleDTO> getAllVehicles() {
+        logger.info("getting all vehicles");
         List<VehicleDTO> vehicles = new ArrayList<>();
         vehicleDAO.findAll().iterator()
                 .forEachRemaining(vehicle -> vehicles.add(VehicleMapper.toDto(vehicle)));
@@ -36,6 +41,7 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     public Optional<VehicleDTO> getVehicle(String id) {
 
+        logger.info("getting vehicle with id: {}", id);
         return vehicleDAO.findByPlate(id).map(VehicleMapper::toDto);
     }
 
@@ -48,6 +54,7 @@ public class VehicleServiceImpl implements VehicleService{
 
             if (vehicle.getArrival()==null) vehicle.setArrival(Timestamp.valueOf(LocalDateTime.now()));
 
+            logger.info("saving vehicle: {}", vehicle);
             Vehicle savedEntity = vehicleDAO.save(VehicleMapper.toEntity(vehicle));
             return VehicleMapper.toDto(savedEntity);
         }
@@ -55,8 +62,9 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     public VehicleDTO updateVehicle(String plate, VehicleDTO vehicle) throws NonExistentPlateException {
-        if(vehicleDAO.existsByPlate(plate)){
 
+        if(vehicleDAO.existsByPlate(plate)){
+            logger.info("updating vehicle: {}", vehicle);
             Vehicle savedEntity = vehicleDAO.save(VehicleMapper.toEntity(vehicle));
             return VehicleMapper.toDto(savedEntity);
         }else{
@@ -68,7 +76,9 @@ public class VehicleServiceImpl implements VehicleService{
     public void deleteVehicle(String plate) {
         Optional<Vehicle> toDelete = vehicleDAO.findByPlate(plate);
 
-        toDelete.ifPresent(v-> vehicleDAO.delete(v));
+        logger.info("vehicle found and deleting: {}", toDelete);
+
+        toDelete.ifPresent(vehicleDAO::delete);
     }
 
 
